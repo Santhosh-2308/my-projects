@@ -1,0 +1,90 @@
+import javax.swing.*;
+import java.awt.*;
+
+public class CalculatorSwingApp {
+    public static void main(String[] args) {    
+        // Create the main frame
+        JFrame frame = new JFrame("Calculator with Menu Bar");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 300);
+        frame.setLayout(new GridLayout(4, 2, 10, 10));
+
+        // Create components
+        JLabel label1 = new JLabel("Enter Number 1:");
+        JTextField textField1 = new JTextField();
+        JLabel label2 = new JLabel("Enter Number 2:");
+        JTextField textField2 = new JTextField();
+        JLabel resultLabel = new JLabel("Result: ");
+
+        // Create menu bar
+        JMenuBar menuBar = new JMenuBar();
+        JMenu operationsMenu = new JMenu("Operations");
+
+        // Create menu items for arithmetic operations
+        JMenuItem addMenuItem = new JMenuItem("Addition");
+        JMenuItem subMenuItem = new JMenuItem("Subtraction");
+        JMenuItem mulMenuItem = new JMenuItem("Multiplication");
+        JMenuItem divMenuItem = new JMenuItem("Division");
+
+        // Add menu items to the menu
+        operationsMenu.add(addMenuItem);
+        operationsMenu.add(subMenuItem);
+        operationsMenu.add(mulMenuItem);
+        operationsMenu.add(divMenuItem);
+        menuBar.add(operationsMenu);
+
+        // Add the menu bar to the frame
+        frame.setJMenuBar(menuBar);
+
+        // Action listener for menu items
+        addMenuItem.addActionListener(e -> calculateResult("Addition", textField1, textField2, resultLabel, frame));
+        subMenuItem.addActionListener(e -> calculateResult("Subtraction", textField1, textField2, resultLabel, frame));
+        mulMenuItem.addActionListener(e -> calculateResult("Multiplication", textField1, textField2, resultLabel, frame));
+        divMenuItem.addActionListener(e -> calculateResult("Division", textField1, textField2, resultLabel, frame));
+
+        // Add components to the frame
+        frame.add(label1);
+        frame.add(textField1);
+        frame.add(label2);
+        frame.add(textField2);
+        frame.add(new JLabel("Selected Operation:")); // Placeholder for better UI alignment
+        frame.add(resultLabel);
+
+        // Make the frame visible
+        frame.setVisible(true);
+    }
+
+    // Method to calculate and display the result
+    private static void calculateResult(String operation, JTextField textField1, JTextField textField2, JLabel resultLabel, JFrame frame) {
+        try {
+            double num1 = Double.parseDouble(textField1.getText());
+            double num2 = Double.parseDouble(textField2.getText());
+            double result;
+
+            switch (operation) {
+                case "Addition":
+                    result = num1 + num2;
+                    break;
+                case "Subtraction":
+                    result = num1 - num2;
+                    break;
+                case "Multiplication":
+                    result = num1 * num2;
+                    break;
+                case "Division":
+                    if (num2 == 0) {
+                        JOptionPane.showMessageDialog(frame, "Cannot divide by zero.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    result = num1 / num2;
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected operation: " + operation);
+            }
+
+            resultLabel.setText("Result: " + result);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(frame, "Invalid input. Please enter valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+}
